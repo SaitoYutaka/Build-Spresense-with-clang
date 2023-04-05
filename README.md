@@ -53,3 +53,21 @@ clang-16: note: was searched for in the directory: ~/clang+llvm-16.0.0-x86_64-li
 ERROR: clang failed: 1
 ```
 
+
+```
+$ cat armv7em_hard_fpv4_sp_d16_nosys
+-target armv7e-m-none-none-eabi
+
+-mthumb
+
+-nostdinc
+
+-I ~/spresense/sdk/apps/include
+-I ~/spresense/nuttx/include/
+-I ~/spresense/nuttx/../sdk/include/
+
+-I ~/spresense/nuttx/include/nuttx/lib/
+-I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/c++/v1/
+-I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/c++/v1/experimental/
+-I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/x86_64-unknown-linux-gnu/c++/v1/
+```

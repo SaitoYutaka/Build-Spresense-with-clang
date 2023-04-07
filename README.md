@@ -26,6 +26,8 @@ $ source spresenseenv/setup
 $ export PATH=~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin:$PATH
 ```
 
+
+
 ```
 $ tools/config.py -m
 ```
@@ -70,4 +72,36 @@ $ cat armv7em_hard_fpv4_sp_d16_nosys
 -I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/c++/v1/
 -I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/c++/v1/experimental/
 -I ~/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/include/x86_64-unknown-linux-gnu/c++/v1/
+```
+
+
+build compiler-rt
+
+```
+cmake ../compiler-rt \
+-G Ninja \
+-DCMAKE_AR=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/llvm-ar \
+-DCMAKE_ASM_COMPILER_TARGET="arm-linux-gnueabihf" \
+-DCMAKE_ASM_FLAGS="-march=armv7a -mthumb --gcc-toolchain=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/bin --sysroot=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc" \
+-DCMAKE_C_COMPILER=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/clang-16 -DCMAKE_C_COMPILER_TARGET="arm-linux-gnueabihf" \
+-DCMAKE_C_FLAGS="-march=armv7a -mthumb -Qunused-arguments --gcc-toolchain=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/bin --sysroot=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc -B $HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/lib/gcc/arm-none-linux-gnueabihf/10.3.1/ -L$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/lib/gcc/arm-none-linux-gnueabihf/10.3.1/ -L$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc/usr/lib/ -I $HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/10.3.1/" \
+-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
+-DCMAKE_CXX_COMPILER_TARGET="arm-linux-gnueabihf" \
+-DCMAKE_CXX_FLAGS=" -Werror=unknown-argument --gcc-toolchain=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/bin --sysroot=$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc -B $HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/lib/gcc/arm-none-linux-gnueabihf/10.3.1/ -L$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/lib/gcc/arm-none-linux-gnueabihf/10.3.1/ -L$HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc/usr/lib/ -I $HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/10.3.1/ -I $HOME/armgcc/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/10.3.1/arm-none-linux-gnueabihf/" \
+-DCMAKE_NM=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/llvm-nm \
+-DCMAKE_RANLIB=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/llvm-ranlib \
+-DCOMPILER_RT_BUILD_BUILTINS=ON \
+-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+-DCOMPILER_RT_BUILD_MEMPROF=OFF \
+-DCOMPILER_RT_BUILD_PROFILE=OFF \
+-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
+-DCOMPILER_RT_BUILD_XRAY=OFF \
+-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
+-DLLVM_CMAKE_DIR=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/cmake/ \
+-DLLVM_CONFIG_PATH=$HOME/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04/bin/llvm-config
+```
+
+
+```
+$ make EXTRA_LIBS=/home/linuxyutaka/llvm-project/build-compiler-rt/lib/linux/libclang_rt.builtins-armhf.a
 ```
